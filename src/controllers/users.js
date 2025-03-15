@@ -116,39 +116,42 @@ export const signinUserController = async (req, res, next) => {
 };
 
 export const refreshUserSessionController = async (req, res, next) => {
-  try {
-    const { sessionId, refreshToken } = req.cookies;
-    if (!sessionId || !refreshToken) {
-      return next(createHttpError(401, 'Refresh token missing'));
-    }
-    const session = await refreshUsersSession({ sessionId, refreshToken });
-    if (!session) {
-      return next(createHttpError(401, 'Invalid refresh token'));
-    }
-    const user = await UsersCollection.findById(session.userId);
-    if (!user) {
-      return next(createHttpError(404, 'User not found'));
-    }
-    setupSession(res, session);
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully refreshed session!',
-      sessionId: session._id,
-      accessToken: session.accessToken,
-      refreshToken: session.refreshToken,
-      user: {
-        email: user.email,
-        name: user.name,
-        gender: user.gender,
-        avatar: user.avatarUrl,
-        weight: user.weight,
-        dailySportTime: user.dailySportTime,
-        dailyNorm: user.dailyNorm,
-      },
+  const sessionId = req.body.sessionId || req.cookies?.sessionId || null;
+  const refreshToken =
+    req.body.refreshToken || req.cookies?.refreshToken || null;
+
+  if (!sessionId || !refreshToken) {
+    return res.status(400).json({
+      status: 400,
+      message: 'Session ID and refresh token are required',
     });
-  } catch (error) {
-    next(error);
   }
+
+  const session = await refreshUsersSession({ sessionId, refreshToken });
+  if (!session) {
+    return next(createHttpError(401, 'Invalid refresh token'));
+  }
+  const user = await UsersCollection.findById(session.userId);
+  if (!user) {
+    return next(createHttpError(404, 'User not found'));
+  }
+  setupSession(res, session);
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully refreshed session!',
+    sessionId: session._id,
+    accessToken: session.accessToken,
+    refreshToken: session.refreshToken,
+    user: {
+      email: user.email,
+      name: user.name,
+      gender: user.gender,
+      avatar: user.avatarUrl,
+      weight: user.weight,
+      dailySportTime: user.dailySportTime,
+      dailyNorm: user.dailyNorm,
+    },
+  });
 };
 
 export const logoutUserController = async (req, res, next) => {
