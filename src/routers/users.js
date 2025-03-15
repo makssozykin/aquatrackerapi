@@ -63,7 +63,7 @@ router.patch(
 router.patch(
   '/avatar',
   authenticate,
-  upload.single('avatar'),
+  upload.single('avatarUrl'),
   ctrlWrapper(updateUserAvatarController),
 );
 
