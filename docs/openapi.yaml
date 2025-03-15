@@ -12,7 +12,7 @@ tags:
   - name: Users
     description: Operations about auth and users.
 servers:
-  - url: https://aquatrack-1v64.onrender.com
+  - url: https://aquatrackerapi.onrender.com
 paths:
   /water/daily:
     get:
