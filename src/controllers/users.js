@@ -33,6 +33,15 @@ export const signupUserController = async (req, res, next) => {
       password: hashedPassword,
     });
 
+    // Генерация сессии и токенов для нового пользователя
+    const { session } = await signinUser({ email, password });
+
+    if (!session || !session.refreshToken) {
+      return next(createHttpError(500, 'Failed to create session'));
+    }
+
+    setupSession(res, session);
+
     res.status(201).json({
       message: 'Successfully registered a user!',
       user: {
@@ -44,6 +53,9 @@ export const signupUserController = async (req, res, next) => {
         dailySportTime: newUser.dailySportTime,
         dailyNorm: newUser.dailyNorm,
       },
+      accessToken: session.accessToken,
+      sessionId: session._id,
+      refreshToken: session.refreshToken,
     });
   } catch (error) {
     next(error);
@@ -95,6 +107,8 @@ export const signinUserController = async (req, res, next) => {
         dailyNorm: user.dailyNorm,
       },
       accessToken: session.accessToken,
+      sessionId: session._id,
+      refreshToken: session.refreshToken,
     });
   } catch (error) {
     next(error);
@@ -138,25 +152,14 @@ export const refreshUserSessionController = async (req, res, next) => {
 };
 
 export const logoutUserController = async (req, res, next) => {
-  try {
-    const { sessionId, refreshToken } = req.cookies;
-
-    if (!sessionId || !refreshToken) {
-      return res.status(401).json({
-        status: 401,
-        message: 'Unauthorized: Missing session or refresh token',
-      });
-    }
-
-    await logoutUser(sessionId);
-
-    res.clearCookie('refreshToken', { httpOnly: true });
-    res.clearCookie('sessionId', { httpOnly: true });
-
-    res.status(204).send();
-  } catch (error) {
-    next(error);
+  if (req.cookies.sessionId) {
+    await logoutUser(req.cookies.sessionId);
   }
+
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.status(204).send();
 };
 
 export const getCurrentUserController = async (req, res, next) => {
