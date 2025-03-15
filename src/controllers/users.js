@@ -15,7 +15,7 @@ import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 // import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 // import { getEnvVar } from '../utils/getEnvVar.js';
 import { UsersCollection } from '../db/models/user.js';
-import { SessionsCollection } from '../db/models/session.js';
+// import { SessionsCollection } from '../db/models/session.js';
 
 export const signupUserController = async (req, res, next) => {
   try {
@@ -128,13 +128,13 @@ export const refreshUserSessionController = async (req, res, next) => {
   }
 
   const session = await refreshUsersSession({ sessionId, refreshToken });
-  if (!session) {
-    return next(createHttpError(401, 'Invalid refresh token'));
-  }
+  // if (!session) {
+  //   return next(createHttpError(401, 'Invalid refresh token'));
+  // }
   const user = await UsersCollection.findById(session.userId);
-  if (!user) {
-    return next(createHttpError(404, 'User not found'));
-  }
+  // if (!user) {
+  //   return next(createHttpError(404, 'User not found'));
+  // }
   setupSession(res, session);
   res.status(200).json({
     status: 200,
