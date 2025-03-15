@@ -1,0 +1,81 @@
+tags:
+  - Users
+summary: Register User
+operationId: signupUser
+description: 'Registration a new User in the Application'
+security: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            description: 'User Email'
+            type: string
+            example: 'kseniia@gmail.com'
+          password:
+            description: 'User Password'
+            type: string
+            example: 'Qwerty12345'
+responses:
+  '201':
+    description: Successfully registered a new user!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - _id
+            - email
+            - password
+            - name
+            - gender
+            - weight
+            - dailySportTime
+            - dailyNorm
+            - avatarUrl
+
+          properties:
+            _id:
+              description: "User's id"
+              type: string
+              example: 67a1f598a6ed272da1c632df
+            name:
+              description: "User's name"
+              type: string
+              example: ''
+            email:
+              description: "User's email"
+              type: string
+              example: 'kseniia@gmail.com'
+            password:
+              description: "User's password"
+              type: string
+              writeOnly: true
+              example: 'Qwerty12345'
+            gender:
+              description: "User's gender"
+              type: string
+              example: 'woman'
+            weight:
+              description: "User's weight"
+              type: number
+              example: 0
+            dailySportTime:
+              description: 'Daily number of hours of sports'
+              type: number
+              example: 0
+            dailyNorm:
+              description: 'The daily rate of water is set, ml'
+              type: number
+              example: 1500
+            avatarUrl:
+              description: "User's avatar url"
+              type: string
+              example: ''
+  '409':
+    $ref: ../../../components/responses/409.yaml

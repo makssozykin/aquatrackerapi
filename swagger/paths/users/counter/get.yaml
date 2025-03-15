@@ -1,0 +1,38 @@
+tags:
+  - Users
+summary: Get registered users counter
+operationId: counterUsers
+description: 'Get some info about registered users'
+security: []
+responses:
+  '200':
+    description: 'Get info about registered users'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully got total count of registered users!
+            data:
+              type: object
+              required:
+                - usersCount
+                - lastUsersAvatars
+              properties:
+                usersCount:
+                  type: number
+                  example: 1488
+                lastUsersAvatars:
+                  type: array
+                  items:
+                    type: string
+                    example: https://res.cloudinary.com/douwe7mix/image/upload/v1738700367/ily2elrvnt2hradnchj3.jpg

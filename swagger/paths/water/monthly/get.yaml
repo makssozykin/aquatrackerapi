@@ -1,0 +1,50 @@
+tags:
+  - Water
+summary: Get monthly water
+operationId: getMonthlyWater
+description: 'Get list of monthly waters with this endpoint'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: month
+    required: true
+    schema:
+      type: string
+      example: '2025-03'
+responses:
+  '200':
+    description: 'Get monthly water'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found monthly water!
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - date
+                  - stats
+                properties:
+                  date:
+                    description: 'Day with total amount of water drunk'
+                    type: string
+                    example: '2025-03-01'
+                  stats:
+                    description: 'Total amount of water drunk per day, ml'
+                    type: number
+                    example: 2100
+  '401':
+    $ref: '../../../components/responses/401.yaml'

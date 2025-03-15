@@ -1,0 +1,67 @@
+tags:
+  - Users
+summary: Update User Data
+operationId: patchUser
+description: 'Update the data about user with payload'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            description: "User's name"
+            type: string
+            example: 'Kseniia Kseniia'
+          email:
+            description: "User's email"
+            type: string
+            example: 'kseniia@gmail.com'
+          gender:
+            description: "User's gender"
+            type: string
+            example: 'woman'
+          weight:
+            description: "User's weight"
+            type: number
+            example: 45
+          dailySportTime:
+            description: 'Daily number of hours of sports'
+            type: number
+            example: 2.5
+          dailyNorm:
+            description: 'The daily rate of water is set, ml'
+            type: number
+            example: 2000
+          # avatarUrl:
+          #   description: "User's avatar"
+          #   type: string
+          #   format: binary
+responses:
+  '200':
+    description: Successfully patched a user!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully patched a user!
+            data:
+              $ref: ../../../components/schemas/user.yaml
+  '400':
+    $ref: ../../../components/responses/400.yaml
+  '401':
+    $ref: ../../../components/responses/401.yaml
+  '500':
+    $ref: ../../../components/responses/500.yaml
