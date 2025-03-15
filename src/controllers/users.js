@@ -9,6 +9,7 @@ import {
   requestResetToken,
   resetPassword,
   getUsersCount,
+  logoutUser,
 } from '../services/users.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 // import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
