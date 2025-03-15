@@ -45,6 +45,7 @@ export const signupUserController = async (req, res, next) => {
     res.status(201).json({
       message: 'Successfully registered a user!',
       user: {
+        id: newUser._id,
         email: newUser.email,
         name: newUser.name,
         gender: newUser.gender,
@@ -98,6 +99,7 @@ export const signinUserController = async (req, res, next) => {
     res.status(200).json({
       message: 'Successfully logged in!',
       user: {
+        id: user._id,
         email: user.email,
         name: user.name,
         gender: user.gender,
@@ -143,6 +145,7 @@ export const refreshUserSessionController = async (req, res, next) => {
     accessToken: session.accessToken,
     refreshToken: session.refreshToken,
     user: {
+      id: user._id,
       email: user.email,
       name: user.name,
       gender: user.gender,
