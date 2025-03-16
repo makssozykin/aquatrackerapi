@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 export const updateUserSchema = Joi.object({
-  name: Joi.string().min(2).max(12),
+  name: Joi.string().min(2).max(16),
   email: Joi.string().email(),
   gender: Joi.string().valid('man', 'woman'),
   weight: Joi.number().min(0).max(250),
