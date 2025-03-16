@@ -183,7 +183,7 @@ export const getCurrentUserController = async (req, res, next) => {
     res.status(200).json({
       status: 200,
       message: 'Current user retrieved successfully!',
-      data: {
+      user: {
         _id,
         name,
         email,
