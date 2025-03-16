@@ -64,7 +64,7 @@ export const getDailyWaterController = async (req, res, next) => {
 export const getMonthlyWaterController = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { month } = req.body;
+    const { month } = req.query;
 
     if (!month) {
       return res.status(400).json({
