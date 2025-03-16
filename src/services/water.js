@@ -37,7 +37,10 @@ export const updateWater = async (userId, id, volume, date) => {
 };
 
 export const deleteWater = async (userId, id) => {
-  const deletedWater = await WaterCollection.findOneAndDelete({ _id: id, userId });
+  const deletedWater = await WaterCollection.findOneAndDelete({
+    _id: id,
+    userId,
+  });
   if (!deletedWater) {
     throw createError(404, 'No record found');
   }
@@ -52,7 +55,9 @@ export const getDailyWater = async (userId, date) => {
   return WaterCollection.find({ userId, date: { $gte: start, $lt: end } })
     .sort({ date: -1 })
     .lean()
-    .then(entries => entries.map(entry => ({ ...entry, date: new Date(entry.date) })));
+    .then((entries) =>
+      entries.map((entry) => ({ ...entry, date: new Date(entry.date) })),
+    );
 };
 
 export const getMonthlyWater = async (userId, month) => {
@@ -60,7 +65,10 @@ export const getMonthlyWater = async (userId, month) => {
   const start = new Date(year, monthIndex - 1, 1);
   const end = new Date(year, monthIndex, 0, 23, 59, 59, 999);
 
-  const waterEntries = await WaterCollection.find({ userId, date: { $gte: start, $lt: end } })
+  const waterEntries = await WaterCollection.find({
+    userId,
+    date: { $gte: start, $lt: end },
+  })
     .sort({ date: 1 })
     .lean();
 
@@ -70,8 +78,14 @@ export const getMonthlyWater = async (userId, month) => {
     return acc;
   }, {});
 
-  return Array.from({ length: new Date(year, monthIndex, 0).getDate() }, (_, i) => ({
-    date: `${year}-${String(monthIndex).padStart(2, '0')}-${String(i + 1).padStart(2, '0')}`,
-    stats: groupedByDay[i + 1] || 0,
-  }));
+  const daysInMonth = new Date(year, monthIndex, 0).getDate();
+  const result = Array.from({ length: daysInMonth }, (_, i) => {
+    const formattedDate = `${year}-${String(monthIndex).padStart(
+      2,
+      '0',
+    )}-${String(i + 1).padStart(2, '0')}`;
+    return { date: formattedDate, stats: groupedByDay[i + 1] || 0 };
+  });
+
+  return result;
 };

@@ -61,11 +61,10 @@ export const getDailyWaterController = async (req, res, next) => {
   });
 };
 
-// отримує дані споживання за конкретний місяць
 export const getMonthlyWaterController = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { month } = req.query; // Очікую формат "2025-03"
+    const { month } = req.query;
 
     if (!month) {
       return res.status(400).json({
